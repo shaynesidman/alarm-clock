@@ -5,13 +5,14 @@
 {% endblock%}
 
 {% block body %}
+<script src="{{ url_for("static", filename="js/clock.js") }}"></script>
 <section id="alarm-grid">
     <div class="grid-container">
         <div class="grid">
             <div class="cell bottom-right">1</div>
             <div class="cell bottom-left bottom-right">2</div>
             <div class="cell bottom-left">3</div>
-            <div class="cell merge top-right">{{ time }}</div>
+            <div id="clock" class="cell merge top-right">{{ time }}</div>
             <div class="cell top-left">6</div>
         </div>
     </div>
