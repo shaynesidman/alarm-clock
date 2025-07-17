@@ -9,7 +9,14 @@
 <section id="alarm-grid">
     <div class="grid-container">
         <div class="grid">
-            <div class="cell bottom-right">1</div>
+            <div class="cell bottom-right">
+                <h2>Upcoming Events</h2>
+                <ul>
+                    {% for event in events %}
+                        <li>{{ event.start }} — {{ event.summary }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
             <div class="cell bottom-left bottom-right">{{ weather }}</div>
             <div class="cell bottom-left">{{ sleep }}</div>
             <div id="clock" class="cell merge top-right">{{ time }}</div>
