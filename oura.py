@@ -1,53 +1,27 @@
 import os
-import json
 import requests
+from datetime import date
+import json
 from dotenv import load_dotenv
 load_dotenv()
 
 OURA_API_KEY = os.getenv("OURA_API_KEY")
 HEADERS = { "Authorization": f"Bearer {OURA_API_KEY}" }
+PARAMS = {
+    "start_date": date.today()
+}
 
 def get_sleep_summary():
     url = "https://api.ouraring.com/v2/usercollection/sleep"
-    response = requests.get(url, headers=HEADERS)
+    response = requests.get(url, headers=HEADERS, params=PARAMS)
     data = response.json()
+    sleep_list = data["data"]
+    valid_heart_rates = [entry["average_heart_rate"] for entry in sleep_list if entry["average_heart_rate"] != 0]
 
-    sleep_data = {
-        "avg_heart_rate": data.get("data")[0].get("average_heart_rate"),
-        "bedtime_start": data.get("data")[0].get("bedtime_start"),
-        "bedtime_end": data.get("data")[0].get("bedtime_end"),
-        "time_in_bed": data.get("data")[0].get("time_in_bed"), # in seconds
-        "total_sleep": data.get("data")[0].get("total_sleep_duration"), # in seconds
+    return {
+        "avg_heart_rate": sum(valid_heart_rates) / len(valid_heart_rates) if valid_heart_rates else 0,
+        "bedtime_start": sleep_list[0].get("bedtime_start"),
+        "bedtime_end": sleep_list[len(sleep_list) - 1]["bedtime_end"],
+        "time_in_bed": sum(entry["time_in_bed"] for entry in sleep_list), # in seconds
+        "total_sleep": sum(entry["total_sleep_duration"] for entry in sleep_list), # in seconds
     }
-    
-    return sleep_data
-
-def get_activity_summary():
-    url = "https://api.ouraring.com/v2/usercollection/daily_activity"
-    response = requests.get(url, headers=HEADERS)
-    data = response.json()
-    if data and "data" in data and len(data["data"]) > 0:
-        activity = data["data"][0]
-        print({
-            "calories": activity.get("cal_active"),
-            "steps": activity.get("steps"),
-            "score": activity.get("score")
-        })
-        return
-    return {}
-
-def get_heart_rate_summary():
-    url = "https://api.ouraring.com/v2/usercollection/daily_hrv"
-    response = requests.get(url, headers=HEADERS)
-    data = response.json()
-    if data and "data" in data and len(data["data"]) > 0:
-        hrv = data["data"][0]
-        return {
-            "hrv_avg": hrv.get("rmssd"),
-            "hrv_high": hrv.get("rmssd_5min", {}).get("high")
-        }
-    return {}
-
-
-if __name__ in "__main__":
-    get_sleep_summary()
