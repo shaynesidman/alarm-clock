@@ -7,13 +7,10 @@ load_dotenv()
 
 OURA_API_KEY = os.getenv("OURA_API_KEY")
 HEADERS = { "Authorization": f"Bearer {OURA_API_KEY}" }
-PARAMS = {
-    "start_date": date.today()
-}
 
 def get_sleep_summary():
     url = "https://api.ouraring.com/v2/usercollection/sleep"
-    response = requests.get(url, headers=HEADERS, params=PARAMS)
+    response = requests.get(url, headers=HEADERS)
     data = response.json()
     sleep_list = data["data"]
     valid_heart_rates = [entry["average_heart_rate"] for entry in sleep_list if entry["average_heart_rate"] != 0]
