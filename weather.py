@@ -1,20 +1,27 @@
 import requests
-import os
+import json
 import geocoder
 
 def get_weather():
-    weather_api_key = os.getenv("WEATHER_API_KEY")
-    lat_lng = get_lat_lng()
-    url = f"https://api.openweathermap.org/data/2.5/onecall?lat={lat_lng[0]}&lon={lat_lng[1]}&exclude=minutely&appid={weather_api_key}&units=imperial"
-
-    response = requests.get(url)
-    data = response.json()
-    print(data)
-    weather = {
-        
+    lat, lng = get_lat_lng()
+    headers = {
+        "User-Agent": "alarm-clock-app (your_email@example.com)",
+        "Accept": "application/ld+json"
     }
-    return weather
 
+    points_url = f"https://api.weather.gov/points/{lat},{lng}"
+    points_resp = requests.get(points_url, headers=headers)
+    location_data = points_resp.json()
+
+    city = location_data["relativeLocation"]["city"]
+    state = location_data["relativeLocation"]["state"]
+    forecast_url = location_data["forecast"]
+
+    forecast_resp = requests.get(forecast_url, headers=headers)
+    forecast_resp.raise_for_status()
+    forecast_data = forecast_resp.json()
+    forecast_periods = forecast_data["periods"]
+    
 
 def get_lat_lng():
     my_location = geocoder.ip("me")
