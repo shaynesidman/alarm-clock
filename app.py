@@ -9,10 +9,10 @@ app = Flask(__name__)
 @app.route("/")
 def index():
     time = datetime.now().strftime("%H:%M:%S")
-    # weather = get_weather("Medford")
+    weather = get_weather()
     sleep = get_sleep_summary()
     events = get_calendar_events()
-    return render_template("index.html", time=time, sleep=sleep, events=events)
+    return render_template("index.html", weather=weather, time=time, sleep=sleep, events=events)
 
 if __name__ == "__main__":
     app.run(debug=True)

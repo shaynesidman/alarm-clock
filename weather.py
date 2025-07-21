@@ -21,8 +21,9 @@ def get_weather():
     forecast_resp.raise_for_status()
     forecast_data = forecast_resp.json()
     forecast_periods = forecast_data["periods"]
+    next_three_periods = forecast_periods[:3]
 
-    json.dumps(forecast_periods, indent=2)
+    return next_three_periods, city, state
 
 
 def get_lat_lng():
