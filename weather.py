@@ -72,7 +72,7 @@ def get_weather_icon(shortForecast):
         "Variable Clouds": "cloudy",          # bkn
     }
 
-    return condition_to_icon[shortForecast]
+    return condition_to_icon.get(shortForecast, "sunny") # default to sunny
 
 
 if __name__ in "__main__":
