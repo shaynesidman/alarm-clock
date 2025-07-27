@@ -11,13 +11,22 @@
         <div class="grid">
             <div class="cell bottom-right">
                 <h2>Upcoming Events</h2>
-                <ul>
+                <!-- <ul>
                     {% for event in events %}
                         <li>{{ event.start }} — {{ event.summary }}</li>
                     {% endfor %}
-                </ul>
+                </ul> -->
             </div>
-            <div class="cell bottom-left bottom-right">{{ weather }}</div>
+            <div class="cell bottom-left bottom-right weather">
+                {% for day in weather[0] %}
+                    <div>
+                        {{ day.startTime }}
+                        {{ day.temperature }}
+                        {{ day.shortForecast }}
+                    </div>
+                {% endfor %}
+                {{weather}}
+            </div>
             <div class="cell bottom-left">
                 {{ sleep }}
             </div>

@@ -53,4 +53,10 @@
 .clock {
     font-size: 7rem;
 }
+
+.weather {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
         
