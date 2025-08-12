@@ -15,6 +15,16 @@ def get_sleep_summary():
     sleep_list = data["data"]
     valid_heart_rates = [entry["average_heart_rate"] for entry in sleep_list if entry["average_heart_rate"] != 0]
 
+    # If no sleep data, return nothing
+    if len(sleep_list) == 0:
+        return {
+        "avg_heart_rate": 0,
+            "bedtime_start": "",
+            "bedtime_end": "",
+            "time_in_bed": 0,
+            "total_sleep": 0,
+        }
+
     return {
         "avg_heart_rate": sum(valid_heart_rates) / len(valid_heart_rates) if valid_heart_rates else 0,
         "bedtime_start": sleep_list[0].get("bedtime_start"),
