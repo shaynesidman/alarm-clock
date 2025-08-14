@@ -1,6 +1,6 @@
 import os
 import requests
-from datetime import date
+from datetime import datetime
 import json
 from dotenv import load_dotenv
 load_dotenv()
@@ -26,9 +26,18 @@ def get_sleep_summary():
         }
 
     return {
-        "avg_heart_rate": sum(valid_heart_rates) / len(valid_heart_rates) if valid_heart_rates else 0,
-        "bedtime_start": sleep_list[0].get("bedtime_start"),
-        "bedtime_end": sleep_list[len(sleep_list) - 1]["bedtime_end"],
-        "time_in_bed": sum(entry["time_in_bed"] for entry in sleep_list), # in seconds
-        "total_sleep": sum(entry["total_sleep_duration"] for entry in sleep_list), # in seconds
+        "avg_heart_rate": int (sum(valid_heart_rates) / len(valid_heart_rates) + 0.5) if valid_heart_rates else 0,
+        "bedtime_start": format_time(sleep_list[0].get("bedtime_start")),
+        "bedtime_end": format_time(sleep_list[-1]["bedtime_end"]),
+        "time_asleep": sum(entry["total_sleep_duration"] for entry in sleep_list),
+        "efficiency": int(
+            sum(entry["total_sleep_duration"] for entry in sleep_list)
+            / sum(entry["time_in_bed"] for entry in sleep_list) * 100
+        ),
     }
+
+
+# Extracts time from long datetime object
+def format_time(dt_str):
+    dt = datetime.fromisoformat(dt_str)
+    return dt.strftime("%I:%M %p")

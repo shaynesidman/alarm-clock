@@ -17,7 +17,7 @@
                     {% endfor %}
                 </ul> -->
             </div>
-            <div class="cell bottom-left bottom-right weather">
+            <div class="cell bottom-left bottom-right center-flex-col">
                 {% for day in weather[0] %}
                     <div>
                         {{ day.startTime }}
@@ -26,8 +26,25 @@
                     </div>
                 {% endfor %}
             </div>
-            <div class="cell bottom-left">
-                {{ sleep }}
+            <div class="cell bottom-left center-flex-col">
+                <div class="center-flex-row">
+                    <div class="center-flex-col inner-cell">
+                        <img src="static/images/heart.svg" alt="Heart icon" />
+                        {{ sleep.avg_heart_rate }} BPM
+                    </div>
+                    <div class="center-flex-col inner-cell">
+                        <img src="static/images/efficiency.svg" alt="Efficiency icon" />
+                        {{ sleep.efficiency }}%
+                    </div>
+                </div>
+
+                <div class="center-flex-row">
+                    <p>{{sleep.bedtime_start}} - <br /> {{sleep.bedtime_end}}</p>
+                    <div class="center-flex-col">
+                        <img src="static/images/bed.svg" alt="Bed icon" />
+                        {{sleep.time_asleep}}
+                    </div>
+                </div>
             </div>
             <div id="clock" class="cell merge top-right clock">{{ time }}</div>
             <div class="cell top-left">Settings</div>
